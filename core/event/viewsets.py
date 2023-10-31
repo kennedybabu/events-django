@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 class EventViewSet(AbstractViewSet):
-    http_method_names = ('post', 'get')
+    http_method_names = ('post', 'get', 'put', 'delete')
     permission_classes = (IsAuthenticated,)
     serializer_class = EventSerializer 
 
