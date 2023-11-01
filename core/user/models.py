@@ -57,6 +57,8 @@ class User(AbstractBaseUser, PermissionsMixin, AbstractModel):
     created = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now_add=True)
     bio = models.TextField(null=True)
+    events_liked = models.ManyToManyField("core_event.Event", related_name='liked_by')
+    events_attending = models.ManyToManyField("core_event.Event", related_name='attending_by')
 
 
     USERNAME_FIELD = 'email'
@@ -70,4 +72,32 @@ class User(AbstractBaseUser, PermissionsMixin, AbstractModel):
     @property
     def name(self):
         return f"{self.first_name} {self.last_name}"
+    
+
+
+    def attend(self, event):
+        """Show interest in attendning the event"""
+        return self.events_attending.add(event)    
+
+    def not_attend(self, event):
+        """Remove name from list of the attendees"""
+        return self.events_attending.remove(event)
+    
+    def has_attending(self, event):
+        """Return True if the user is attending the event;else False"""
+        return self.events_attending.filter(pk=event.pk).exists()
+    
+
+    #event methods 
+    def like(self, event):
+        """Like a `event` if it hasnt been done yet"""
+        return self.events_liked.add(event)
+
+    def remove_like(self, event):
+        """Remove a like from an event"""
+        return self.events_liked.remove(event) 
+    
+    def has_liked(self, event):
+        """Return True if the user has liked an event; else False"""
+        return self.events_liked.filter(pk=event.pk).exists()
 

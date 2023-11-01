@@ -8,6 +8,10 @@ from core.user.serializers import UserSerializer
 
 class EventSerializer(AbstractSerializer):
     author = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='public_id')
+    liked = serializers.SerializerMethodField()
+    likes_count = serializers.SerializerMethodField()
+    attending = serializers.SerializerMethodField()
+    attending_count = serializers.SerializerMethodField()
 
     def validate_author(self, value):
         if self.context["request"].user != value:
@@ -28,8 +32,28 @@ class EventSerializer(AbstractSerializer):
         
         instance = super().update(instance, validated_data)
         return instance
+    
+    def get_attending(self, instance):
+        request = self.context.get('request', None)
+
+        if request is None or request.user.is_anonymous:
+            return False 
+        return request.user.has_attending(instance)
+    
+    def get_attending_count(self, instance):
+        return instance.attending_by.count()
+    
+    def get_liked(self, instance):
+        request = self.context.get('request', None)
+
+        if request is None or request.user.is_anonymous:
+            return False
+        return request.user.has_liked(instance)
+    
+    def get_likes_count(self, instance):
+        return instance.liked_by.count()
     class Meta:
         model = Event 
         #list all the fields that will be included in a req or response 
-        fields = ['id', 'author', 'body', 'edited', 'created', 'date', 'updated']
+        fields = ['id', 'author', 'body', 'edited', 'created', 'date', 'updated', 'liked', 'likes_count', 'attending', 'attending_count']
         read_only_fields = ['edited']

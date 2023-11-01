@@ -12,6 +12,9 @@ class Event(AbstractModel):
     edited = models.BooleanField(default=False)
     # banner = models.
     date = models.DateTimeField()
+    due = models.BooleanField(default=False)
+    ticket_price = models.CharField(max_length=8, null=True)
+    age_limit = models.CharField(max_length=3, null=True)
 
     objects = EventManager()
     def __str__(self):
