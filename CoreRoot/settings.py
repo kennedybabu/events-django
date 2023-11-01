@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'core.user',
     'core.auth',
     'core.event',
+    'core.comment'
 ]
 
 
