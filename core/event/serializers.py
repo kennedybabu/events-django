@@ -5,7 +5,6 @@ from core.abstract.serializers import AbstractSerializer
 from core.event.models import Event 
 from core.user.models import User 
 from core.user.serializers import UserSerializer
-import datetime
 
 class EventSerializer(AbstractSerializer):
     author = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='public_id')
