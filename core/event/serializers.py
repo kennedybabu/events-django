@@ -5,6 +5,7 @@ from core.abstract.serializers import AbstractSerializer
 from core.event.models import Event 
 from core.user.models import User 
 from core.user.serializers import UserSerializer
+import datetime
 
 class EventSerializer(AbstractSerializer):
     author = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='public_id')
@@ -12,19 +13,18 @@ class EventSerializer(AbstractSerializer):
     likes_count = serializers.SerializerMethodField()
     attending = serializers.SerializerMethodField()
     attending_count = serializers.SerializerMethodField()
-
+    
     def validate_author(self, value):
         if self.context["request"].user != value:
             raise ValidationError("You cant create an event for another user")
         return value 
     
-
+ 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
         author = User.objects.get_object_by_public_id(rep['author'])
         rep["author"] = UserSerializer(author).data
-        return rep
-    
+        return rep    
 
     def update(self, instance, validated_data):
         if not instance.edited:
@@ -55,5 +55,5 @@ class EventSerializer(AbstractSerializer):
     class Meta:
         model = Event 
         #list all the fields that will be included in a req or response 
-        fields = ['id', 'author', 'body', 'edited', 'created', 'date', 'updated', 'liked', 'likes_count', 'attending', 'attending_count']
+        fields = ['id', 'author', 'body', 'edited', 'created', 'date', 'due', 'updated', 'liked', 'likes_count', 'attending', 'attending_count']
         read_only_fields = ['edited']

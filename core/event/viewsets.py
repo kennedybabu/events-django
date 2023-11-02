@@ -6,11 +6,23 @@ from core.event.serializers import EventSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import action
+from django.utils import timezone
 
 class EventViewSet(AbstractViewSet):
     http_method_names = ('post', 'get', 'put', 'delete')
     permission_classes = (IsAuthenticated,)
     serializer_class = EventSerializer 
+
+    def list(self, request, *args, **kwargs):
+        events = Event.objects.all()
+
+        now = timezone.now()
+        for event in events:
+            if event.date < now and not event.due:
+                event.due = True 
+                event.save()
+        serializer = EventSerializer(events, many=True)
+        return Response(serializer.data)
 
     def get_queryset(self):
         return Event.objects.all()
@@ -63,6 +75,6 @@ class EventViewSet(AbstractViewSet):
         event = self.get_object()
         user = self.request.user 
         user.remove_like(event)
-        
+
         serializer = self.serializer_class(event)
         return Response(serializer.data, status=status.HTTP_200_OK)

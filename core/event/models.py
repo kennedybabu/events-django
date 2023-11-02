@@ -1,4 +1,6 @@
 from django.db import models
+from datetime import date
+from django.utils import timezone
 
 # Create your models here.
 from core.abstract.models import AbstractManager, AbstractModel 
@@ -18,7 +20,7 @@ class Event(AbstractModel):
 
     objects = EventManager()
     def __str__(self):
-        return f"{self.author.name}"
+        return f"{self.author.name}"  
     
     class Meta:
         db_table = "'core.event'"
