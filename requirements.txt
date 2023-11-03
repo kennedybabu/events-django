@@ -4,3 +4,4 @@ djangorestframework==3.14.0
 django-filter==23.3
 djangorestframework-simplejwt==5.3.0
 drf-nested-routers==0.93.4
+pytest-django==4.6.0

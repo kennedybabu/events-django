@@ -20,7 +20,7 @@ class UserPermission(BasePermission):
             return bool(request.user.id == obj.id)
         
     def has_permission(self, request, view):
-        if view.basename in ["event"]:
+        if view.basename in ["event", "event-comment", "user", "auth-logout"]:
             if request.user.is_anonymous:
                 return request.method in SAFE_METHODS 
             
