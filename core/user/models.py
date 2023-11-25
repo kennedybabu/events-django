@@ -7,6 +7,11 @@ from django.http import Http404
 from core.abstract.models import AbstractManager, AbstractModel
 
 # Create your models here.
+def user_directory_path(instance, filename):
+    # MEDIA_ROOT/user_<id>/<filename>
+    return 'user_{0}/{1}'.format(instance.public_id, filename)
+
+
 class UserManager(BaseUserManager, AbstractManager):
     def get_object_by_public_id(self, public_id):
         try:
@@ -14,6 +19,7 @@ class UserManager(BaseUserManager, AbstractManager):
             return instance
         except (ObjectDoesNotExist, ValueError, TypeError):
             return Http404
+        
         
     def create_user(self, username, email, password=None, **kwargs):
         """create and return user with email, phone no, username and password"""
@@ -57,8 +63,10 @@ class User(AbstractBaseUser, PermissionsMixin, AbstractModel):
     created = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now_add=True)
     bio = models.TextField(null=True)
+    avatar = models.ImageField(null=True, blank=True, upload_to=user_directory_path)
     events_liked = models.ManyToManyField("core_event.Event", related_name='liked_by')
     events_attending = models.ManyToManyField("core_event.Event", related_name='attending_by')
+    profile_background_image = models.ImageField(null=True, blank=True, upload_to=user_directory_path)
 
 
     USERNAME_FIELD = 'email'
@@ -73,7 +81,6 @@ class User(AbstractBaseUser, PermissionsMixin, AbstractModel):
     def name(self):
         return f"{self.first_name} {self.last_name}"
     
-
 
     def attend(self, event):
         """Show interest in attendning the event"""

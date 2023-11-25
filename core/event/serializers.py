@@ -54,5 +54,5 @@ class EventSerializer(AbstractSerializer):
     class Meta:
         model = Event 
         #list all the fields that will be included in a req or response 
-        fields = ['id', 'author', 'body', 'edited', 'created', 'date', 'due', 'updated', 'liked', 'likes_count', 'attending', 'attending_count']
+        fields = ['id', 'author', 'body', 'edited', 'created', 'date', 'due', 'updated', 'liked', 'likes_count', 'attending', 'attending_count', 'age_limit', 'ticket_price']
         read_only_fields = ['edited']
