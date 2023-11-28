@@ -5,6 +5,7 @@ from core.abstract.serializers import AbstractSerializer
 from core.event.models import Event 
 from core.user.models import User 
 from core.user.serializers import UserSerializer
+from django.conf import settings
 
 class EventSerializer(AbstractSerializer):
     author = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='public_id')
@@ -23,6 +24,13 @@ class EventSerializer(AbstractSerializer):
         rep = super().to_representation(instance)
         author = User.objects.get_object_by_public_id(rep['author'])
         rep["author"] = UserSerializer(author).data
+        if not rep['banner']:
+            rep['banner'] = settings.DEFAULT_EVENT_BANNER_URL
+            return rep
+        if settings.DEBUG:
+            request = self.context.get('request')
+            if request:                
+                rep['banner'] = request.build_absolute_url(rep['banner'])
         return rep    
 
     def update(self, instance, validated_data):
@@ -54,5 +62,5 @@ class EventSerializer(AbstractSerializer):
     class Meta:
         model = Event 
         #list all the fields that will be included in a req or response 
-        fields = ['id', 'author', 'body', 'edited', 'created', 'date', 'due', 'updated', 'liked', 'likes_count', 'attending', 'attending_count', 'age_limit', 'ticket_price']
+        fields = ['id', 'author', 'body', 'edited', 'created', 'date', 'due', 'updated', 'liked', 'likes_count', 'attending', 'attending_count', 'age_limit', 'ticket_price', 'banner']
         read_only_fields = ['edited']
