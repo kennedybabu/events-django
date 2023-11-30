@@ -18,9 +18,18 @@ class UserSerializer(AbstractSerializer):
             return representation
         if settings.DEBUG:
             request = self.context.get('request') 
-            representation['avatar'] = request.build_absolute_url(representation['avatar'])
-            representation['profile_background_image'] = request.build_absolute_url(representation['profile_background_image'])
+            if request:
+                representation['avatar'] = request.build_absolute_uri(representation['avatar'])
+                representation['profile_background_image'] = request.build_absolute_uri(representation['profile_background_image'])
         return representation
+    
+    # def get_avatar(self, obj):
+    #     if not obj.avatar:
+    #         return settings.DEFAULT_AVATAR_URL 
+    #     if settings.DEBUG:
+    #         request = self.context.get('request')
+    #         if request:
+    #             return request.build_absolute_u
 
     class Meta:
         model = User

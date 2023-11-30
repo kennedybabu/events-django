@@ -30,7 +30,7 @@ class EventSerializer(AbstractSerializer):
         if settings.DEBUG:
             request = self.context.get('request')
             if request:                
-                rep['banner'] = request.build_absolute_url(rep['banner'])
+                rep['banner'] = request.build_absolute_uri(rep['banner'])
         return rep    
 
     def update(self, instance, validated_data):
