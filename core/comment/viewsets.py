@@ -8,11 +8,13 @@ from core.comment.serializers import CommentSerializer
 from core.auth.permissions import UserPermission 
 from rest_framework.decorators import action 
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated 
+
 
 
 class CommentViewSet(AbstractViewSet):
     http_method_names = ('post', 'get', 'delete', 'put')
-    permission_classes = (UserPermission,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = CommentSerializer
 
     def get_queryset(self):
