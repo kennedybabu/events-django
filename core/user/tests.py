@@ -10,7 +10,7 @@ data_user = {
     "email": "test@mail.com",
     "first_name": "Test",
     "last_name": "User",
-    "password":"test_password"
+    "password": "test_password"
 }
 
 @pytest.mark.django_db 

@@ -10,10 +10,10 @@ class UserSerializer(AbstractSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        if not representation['avatar']:
+        if 'avatar' in representation and not representation['avatar']:
             representation['avatar'] = settings.DEFAULT_AVATAR_URL
             return representation
-        if not representation['profile_background_image']:
+        if 'profile_background_image' in representation and not representation['profile_background_image']:
             representation['profile_background_image'] = settings.DEFAULT_PROFILE_BG_URL
             return representation
         if settings.DEBUG:
