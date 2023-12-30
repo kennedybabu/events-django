@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'core.auth',
     'core.event',
     'core.comment',
+    'core.blog',
     'corsheaders',
 ]
 
