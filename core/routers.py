@@ -4,7 +4,7 @@ from core.auth.viewsets import RegisterViewSet, LoginViewSet, RefreshViewSet
 from core.event.viewsets import EventViewSet
 from rest_framework_nested import routers
 from core.comment.viewsets import CommentViewSet
-
+from core.blog.viewsets import BlogViewSet
 router = routers.SimpleRouter()
 
 
@@ -22,6 +22,9 @@ router.register(r'event', EventViewSet, basename='event')
 
 events_router = routers.NestedSimpleRouter(router, r'event', lookup='event')
 events_router.register(r'comment', CommentViewSet, basename='comment')
+
+# blog #
+router.register(r'blog', BlogViewSet, basename='blog')
 
 urlpatterns = [
     *router.urls,
