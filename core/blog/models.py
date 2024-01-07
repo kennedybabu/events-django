@@ -13,7 +13,6 @@ def user_directory_path(instance, filename):
 
 class Blog(AbstractModel):
     title = models.CharField(max_length=255)
-    # event = models.ForeignKey("core_event.Event", on_delete=models.PROTECT)
     author = models.ForeignKey("core_user.User", on_delete=models.PROTECT)
     body = models.TextField()
     edited = models.BooleanField(default=False)
