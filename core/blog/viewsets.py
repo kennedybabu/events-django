@@ -8,7 +8,7 @@ from rest_framework import status
 
 
 class BlogViewSet(AbstractViewSet):
-    http_method_names = ('post', 'get', 'delete')
+    http_method_names = ('post', 'get', 'delete', 'put')
     permission_classes = (IsAuthenticated,)
     serializer_class = BlogSerializer 
 
